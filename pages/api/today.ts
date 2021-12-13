@@ -11,9 +11,9 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  setInterval(() => {
-    firebase.firestore().collection('TEST2').add({ name: "test2" })
-  }, 10000);
+  // setInterval(() => {
+  //   firebase.firestore().collection('TEST2').add({ name: "test2" })
+  // }, 10000);
   let date: string | Date = new Date();
   date = formatDate(date);
   console.log(date);
