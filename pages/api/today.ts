@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { formatDate } from '../../utils/FormatDates'
+import firebase from '../../firebase';
 
 type Data = {
   name: string
@@ -10,7 +11,9 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-
+  setInterval(() => {
+    firebase.firestore().collection('TEST2').add({ name: "test2" })
+  }, 10000);
   let date: string | Date = new Date();
   date = formatDate(date);
   console.log(date);
@@ -24,7 +27,6 @@ export default function handler(
       console.log(err);
       res.send(err);
     })
-
 }
 
 function formatData(data: any) {

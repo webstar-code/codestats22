@@ -25,20 +25,19 @@ const Today: NextPage = () => {
 			headers: { 'token': token! }
 		}).then((res) => res.json())
 			.then((data) => {
+				console.log(data);
 				let items: any = [];
 				data.projects.forEach((item: any) => {
 					let x = [];
 					x.push(item.project);
 					x.push(secondsToReadable(item.duration));
-					let hrs =(item.duration / 3600);
+					let hrs = (item.duration / 3600);
 					items.push([item.project, hrs, randomColor()]);
 				})
-				console.log(items)
 				setToday(items);
 
 			})
 	}, []);
-	console.log(today);
 
 	useEffect(() => {
 		if (today && today?.grand_total) {
