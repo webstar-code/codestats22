@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Home page</h1>
-        <a href="/api/login">Login</a>
+        <Link href="/api/login">Login</Link>
 
       </main>
 
