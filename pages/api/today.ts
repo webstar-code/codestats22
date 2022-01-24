@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { formatDate } from '../../utils/FormatDates'
+import { formatDate } from '../../utils/methods'
 import firebase from '../../firebase';
 
 type Data = {
@@ -14,15 +14,17 @@ export default function handler(
   // setInterval(() => {
   //   firebase.firestore().collection('TEST2').add({ name: "test2" })
   // }, 10000);
-  let date: string | Date = new Date();
-  date = formatDate(date);
-  console.log(date);
+  // let date: string | Date = new Date();
+  let date = req.query.date;
   fetch(`https://wakatime.com/api/v1/users/current/durations?date=${date}`, {
     headers: {
       'Authorization': 'Bearer ' + req.headers['token']
     }
   }).then((res) => res.json())
-    .then((data) => res.send(formatData(data)))
+    .then((data) => {
+      // console.log(data);
+      res.send(formatData(data))
+    })
     .catch((err) => {
       console.log(err);
       res.send(err);
