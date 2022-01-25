@@ -40,3 +40,14 @@ export function secondsToReadableTime(seconds: number) {
   let mins = Math.floor((seconds - hrs * 3600) / 60);
   return `${hrs}:${mins}`
 }
+
+/**
+ * @name format_date_toMonth
+ * @param {number} milliseconds 
+ * @returns {string} Jan 12
+ */
+export function format_date_toMonth(date: number) {
+  return (
+    new Date(date).toDateString().split(" ").slice(1).slice(0, 2).join().replace(',', ' ')
+  )
+}

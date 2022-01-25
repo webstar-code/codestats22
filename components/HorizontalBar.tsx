@@ -2,43 +2,6 @@ import { useRef } from "react";
 import * as d3 from 'd3';
 import { formatDate, secondsToReadableTime } from "../utils/methods";
 
-
-
-const localdata = {
-  "branches": [
-    "main",
-    "master"
-  ],
-  "data": [
-    {
-      "duration": 394.367256,
-      "project": "CodeStats",
-      "time": 1642919938.506725
-    },
-    {
-      "duration": 8047.798214,
-      "project": "ana",
-      "time": 1642933907.895455
-    },
-    {
-      "duration": 324.097853,
-      "project": "AwesomeProject",
-      "time": 1642945196.519228
-    },
-    {
-      "duration": 6492.851654,
-      "project": "CodeStats",
-      "time": 1642949392.70704
-    }
-  ],
-  "end": "2022-01-23T18:29:59Z",
-  "start": "2022-01-22T18:30:00Z",
-  "timezone": "Asia/Kolkata"
-}
-
-
-
-
 interface ProjectProps {
   data: {
     name: string,
@@ -48,16 +11,14 @@ interface ProjectProps {
   date: number
 }
 
-
 const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
-  console.log(date);
   const canvasRef = useRef(null);
   const width = 1200;
-  const height = 48 * data.length;
+  const height = 36 * data.length;
   const margin = { top: 20, right: 20, bottom: 20, left: 120 };
 
   const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  const innerHeight = height;
 
   let fomratter = d3.timeFormat('%I %p');
   const xScale = d3
@@ -69,21 +30,19 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
     .domain((data.map((p) => p.name)))
     .range([0, innerHeight]);
 
-
   return (
 
     <div ref={canvasRef}>
       <svg width={width}>
-
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-
           {yScale.domain().map(item => (
-            <g>
+            <g key={yScale(item)}>
               <text
                 y={yScale(item)}
-                dy="15"
-                style={{ textAnchor: 'end', fontSize: 14, fontWeight: 'bold' }}
+                dy="24"
+                style={{ textAnchor: 'end' }}
                 x={-5}
+                className="text-sm font-semibold"
               >
                 {item}
                 &ensp;
@@ -93,7 +52,7 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
           ))}
           <g>
             {xScale.ticks(24).map((item) => (
-              <g transform={`translate(${xScale(item)},-5)`}>
+              <g transform={`translate(${xScale(item)},-5)`} key={xScale(item)}>
                 <line
                   x1={0}
                   x2={0}
@@ -112,6 +71,7 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
             {data.map(project => (
               project.timestamps.map((item) =>
                 <rect
+                  key={item.time}
                   x={xScale(new Date(item.time))}
                   y={yScale(project.name)! + 6}
                   width={xScale(new Date(item.time + item.duration * 1000)) - xScale(new Date(item.time))}
@@ -123,6 +83,7 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
             ))}
             {data.map((project, i) => (
               <line
+                key={project.name}
                 x1={0}
                 x2={innerWidth}
                 y1={yScale(project.name)}
@@ -131,8 +92,6 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
               />
             ))}
           </g>
-
-
 
           <line
             x1={0}
@@ -163,8 +122,6 @@ const HorizontalBar: React.FC<ProjectProps> = ({ data, date }) => {
             stroke="#ebebeb"
           />
         </g>
-
-
       </svg>
     </div >
 
