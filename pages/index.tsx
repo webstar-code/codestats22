@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import Router, { useRouter } from 'next/router'
@@ -8,8 +7,9 @@ const Home: NextPage = () => {
   if (typeof window !== "undefined") {
     const router = useRouter();
     if (localStorage.getItem("token")) {
-      router.push('/today');
+      router.push('/day');
     } else {
+      router.push('/login')
     }
   }
   return (

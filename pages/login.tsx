@@ -10,7 +10,7 @@ const Login: NextPage = () => {
     if (router.query.token) {
       let token: any = router.query.token
       localStorage.setItem('token', token)
-      router.push('/today');
+      router.push('/day');
     }
   }, [router.query])
 
