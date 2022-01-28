@@ -1,8 +1,11 @@
+// @ts-nocheck
 import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import { ReactContext } from '../context/context';
 
 const BarChart = (data: any) => {
   const canvasRef = useRef(null);
+  const state = useContext(ReactContext);
 
   function secondsToReadable(seconds: number) {
     let hrs = Math.floor(seconds / 3600);
@@ -10,71 +13,131 @@ const BarChart = (data: any) => {
     return `${hrs}hrs ${mins}min`
   }
 
-  const drawChart = (data: any) => {
-    const projects = data.data.projects;
-    const cWidth = 500;
-    const cHeight = 500;
+  const width = 1200;
+  const height = 600;
+  const margin = { top: 20, right: 20, bottom: 20, left: 50 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
 
-    let yMax = Math.ceil(projects[d3.maxIndex(projects, (item: any) => item.duration)].duration);
-    const scale = cHeight / yMax;
 
-    const yScale = d3.scaleLinear()
-      .domain([
-        0,
-        yMax
-      ]).range([0, cHeight]);
+  var colors = ["#ADFFE2", "#5CFFC6", "#00F59F", "#00B877", "#008F5D", "#005235"];
+  var colorScale = d3.scaleQuantile()
+    .domain([0, Math.max(...state?.days?.map((item) => Number(item.grand_total.decimal))!)])
+    //@ts-ignore
+    .range(colors)!;
 
-    // const xScale = d3.scaleTime()
-    //   .domain(d3.extent(data[0].items, (d) => d.date))
-    //   .range([0, cWidth]);
 
-    const svgCanvas = d3.select(canvasRef.current)
-      .append('svg')
-      .attr("width", cWidth)
-      .attr("height", cHeight)
-      .style("border", "1px solid black")
+  const yScale = d3.scaleLinear()
+    .domain([0, Math.max(...state?.days?.map((item) => Number(item.grand_total.decimal))!)])
+    .range([innerHeight, 0]);
 
-    const yAxis = d3.axisLeft(yScale)
-      .ticks(5)
-      .tickSize(-cWidth)
-      .tickFormat((val) => `${val}%`);
-    const yAxisGroup = svgCanvas.append("g").call(yAxis);
-    yAxisGroup.select(".domain").remove();
-    yAxisGroup.selectAll("line").attr("stroke", "rgba(255, 255, 255, 0.2)");
-    yAxisGroup.selectAll("text")
-      .attr("opacity", 0.5)
-      .attr("color", "black")
-      .attr("font-size", "0.75rem");
 
-    svgCanvas.selectAll("rect")
-      .data(projects)
-      .enter()
-      .append("rect")
-      .attr("width", 40)
-      .attr("height", (datapoint: any) => datapoint.duration * scale)
-      .attr("fill", "blue")
-      .attr("x", (datapoint, iteration) => iteration * 45)
-      .attr("y", (datapoint: any, iteration) => cHeight - datapoint.duration * scale);
+  const xScale = d3.scaleBand()
+    .domain(state?.days?.map((item) => item.date)!)
+    .range([0, innerWidth])
 
-    svgCanvas.selectAll("text")
-      .data(projects)
-      .enter()
-      .append("text")
-      .attr("x", (datapoint: any, i) => i * 45 + 20)
-      .attr("y", (datapoint: any, i) => cHeight - datapoint.duration * scale - 10)
-      .text((datapoint: any) => secondsToReadable(datapoint.duration * 3600))
+  const tooltip = d3.select(canvasRef.current)
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip-area")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .style('position', 'absolute')
 
+
+  const canvas = d3.select(canvasRef.current);
+
+  var mouseover = function (d) {
+    tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  var mousemove = function (d, day) {
+    tooltip
+      .html((day.date) + " : " + day?.grand_total?.text)
+      .style("left", (d3.pointer(d, this)[0] + 70) + "px")
+      .style("top", (d3.pointer(d, this)[1]) + "px")
+  }
+  var mouseleave = function (d) {
+    tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
   }
 
 
-
-  useEffect(() => {
-    drawChart(data);
-  }, []);
-
+  canvas.selectAll("rect")
+    .data(state?.days!)
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
   return (
     <div ref={canvasRef}>
+      <svg width={width} height={height}>
+        <g transform={`translate(${margin.left}, ${margin.bottom})`}>
+          <line
+            stroke="#c0c0c0"
+            x1={0}
+            x2={innerWidth}
+            y1={innerHeight}
+            y2={innerHeight}
+          />
+          <line
+            stroke="#c0c0c0"
+            x1={0}
+            x2={0}
+            y1={0}
+            y2={innerHeight}
+          />
+          {yScale.ticks().map((item) => (
+            <g transform={`translate(0,${yScale(item)})`} key={(item)}>
+              <text
+                x={-20}
+                y={5}
+              >{item}</text>
+              <line
+                stroke="#c0c0c0"
+                x1={0}
+                y1={0}
+                x2={innerWidth}
+                y2={0}
+              />
+            </g>
+          ))}
 
+
+          {/* {xScale.domain().map((tickValue) => (
+            <g
+              transform={`translate(${xScale(tickValue)}, ${innerHeight}) rotate(-90)`}
+            >
+              <text
+                dy={20}
+                // y={innerHeight}
+                style={{ textAnchor: 'start', fontSize: 10 }}
+              >
+                {tickValue.slice(0, 2)}
+              </text>
+            </g>
+          ))} */}
+          {state?.days?.map((day, i) => (
+            <rect
+              height={innerHeight - yScale(Number(day?.grand_total?.decimal))}
+              x={xScale(day.date)}
+              y={yScale(Number(day.grand_total.decimal))}
+              width={xScale.bandwidth()}
+              fill={`${colorScale(Number(day.grand_total.decimal))}`}
+
+            />
+          ))}
+        </g>
+
+      </svg>
     </div>
   )
 }
