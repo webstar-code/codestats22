@@ -22,7 +22,7 @@ export default function handler(
     }
   }).then((res) => res.json())
     .then((data) => {
-      // console.log(data);
+      console.log(data);
       res.send(formatData(data))
     })
     .catch((err) => {

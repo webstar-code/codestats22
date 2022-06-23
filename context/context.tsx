@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import firebase from '../firebase';
 
-interface contextUser {
+export interface contextUser {
   created_at: string,
   display_name: string,
   photo: string
 }
-interface contextDay {
+export interface contextDay {
   date: string,
   grand_total: {
     decimal: string,
@@ -16,7 +16,7 @@ interface contextDay {
   }
 }
 
-interface contextInterface {
+export interface contextInterface {
   user?: contextUser | undefined
   days?: contextDay[] | undefined
 }
@@ -63,7 +63,6 @@ const ReactProvider: React.FC<IProps> = ({ children }) => {
       })
       .catch(err => console.log(err));
   };
-  console.log(state);
 
   useEffect(() => {
     // GetData('user').then(data => setState(state => state = { ...state, days: data }));

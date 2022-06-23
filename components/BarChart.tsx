@@ -1,24 +1,25 @@
 // @ts-nocheck
 import * as d3 from 'd3';
 import { useContext, useEffect, useRef } from 'react';
-import { ReactContext } from '../context/context';
+import { contextDay, contextInterface, ReactContext } from '../context/context';
 
-const BarChart = (data: any) => {
+interface IProps {
+  state: {
+    days: contextDay[] | undefined
+  },
+  week?: boolean
+  month?: boolean
+  year?: boolean
+
+}
+
+const BarChart: React.FC<IProps> = ({ state, month, week, year }) => {
   const canvasRef = useRef(null);
-  const state = useContext(ReactContext);
-
-  function secondsToReadable(seconds: number) {
-    let hrs = Math.floor(seconds / 3600);
-    let mins = Math.floor((seconds - hrs * 3600) / 60);
-    return `${hrs}hrs ${mins}min`
-  }
-
   const width = 1200;
   const height = 600;
   const margin = { top: 20, right: 20, bottom: 20, left: 50 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-
 
   var colors = ["#ADFFE2", "#5CFFC6", "#00F59F", "#00B877", "#008F5D", "#005235"];
   var colorScale = d3.scaleQuantile()
@@ -111,20 +112,20 @@ const BarChart = (data: any) => {
             </g>
           ))}
 
-
-          {/* {xScale.domain().map((tickValue) => (
+            <g>
+          {week && xScale.domain().map((tickValue) => (
             <g
-              transform={`translate(${xScale(tickValue)}, ${innerHeight}) rotate(-90)`}
+            transform={`translate(${xScale(tickValue) + xScale.bandwidth() / 2}, ${innerHeight})`}
             >
               <text
                 dy={20}
-                // y={innerHeight}
-                style={{ textAnchor: 'start', fontSize: 10 }}
-              >
-                {tickValue.slice(0, 2)}
+                style={{ textAnchor: 'middle', fontSize: 14 }}
+                >
+                {tickValue}
               </text>
             </g>
-          ))} */}
+          ))}
+          </g>
           {state?.days?.map((day, i) => (
             <rect
               height={innerHeight - yScale(Number(day?.grand_total?.decimal))}

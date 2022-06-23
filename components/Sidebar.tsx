@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useContext } from "react";
 import { ReactContext } from "../context/context";
+import { formatDate } from "../utils/methods";
 
 
 const Sidebar = () => {
@@ -14,7 +15,7 @@ const Sidebar = () => {
         <h1 className="text-lg whitespace-nowrap font-semibold text-primary">{state?.user?.display_name}</h1>
       </div>
       <div className="flex flex-col items-center justify-center my-5">
-        <Link href={"/day"}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">Today</p></Link>
+        <Link href={`/day`}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">Today</p></Link>
         <Link href={"/week"}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This week</p></Link>
         <p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This month</p>
         <p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This year</p>
