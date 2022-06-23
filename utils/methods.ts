@@ -46,8 +46,22 @@ export function secondsToReadableTime(seconds: number) {
  * @param {number} milliseconds 
  * @returns {string} Jan 12
  */
-export function format_date_toMonth(date: number) {
+export function format_date_toMonth(date: string) {
   return (
     new Date(date).toDateString().split(" ").slice(1).slice(0, 2).join().replace(',', ' ')
   )
+}
+
+
+/**
+ * @name getWeek no. from date
+ * @param {number} date 2021-06-20 
+ * @returns {string} number 25
+ */
+export function getWeek(date: Date): number {
+  var onejan = new Date(date.getFullYear(), 0, 1);
+  var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  // @ts-ignore
+  var dayOfYear = ((today - onejan + 86400000) / 86400000);
+  return Math.ceil(dayOfYear / 7)
 }
