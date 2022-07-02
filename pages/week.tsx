@@ -75,7 +75,7 @@ const Week = () => {
           <div className='w-full flex items-center'>
             <h1 className='text-base font-medium whitespace-nowrap'>Week {currWeek} / {year}</h1>
 
-            <div className="w-full flex-grow flex items-center justify-center">
+            {/* <div className="w-full flex-grow flex items-center justify-center">
               <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
                 <MdChevronLeft className="w-full h-full" onClick={() => setToPrevWeek()} />
               </div>
@@ -85,7 +85,7 @@ const Week = () => {
               <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
                 <MdChevronRight className="w-full h-full" onClick={() => setToNextWeek()} />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className='w-full m-4'>
             <BarChart2 />

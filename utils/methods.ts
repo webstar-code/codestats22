@@ -46,7 +46,7 @@ export function secondsToReadableTime(seconds: number) {
  * @param {number} milliseconds 
  * @returns {string} Jan 12
  */
-export function format_date_toMonth(date: string) {
+export function format_date_toMonth(date: number) {
   return (
     new Date(date).toDateString().split(" ").slice(1).slice(0, 2).join().replace(',', ' ')
   )

@@ -4,12 +4,12 @@ import creds from '../../codestats_creds.json';
 
 const handler = async (event) => {
   try {
-    // admin.initializeApp({
-    //   credential: admin.credential.cert(creds)
-    // })
-    // setInterval(() => {
-    //   admin.firestore().collection('TEST').add({ name: "test" });
-    // }, 10000);
+    admin.initializeApp({
+      credential: admin.credential.cert(creds)
+    })
+    setInterval(() => {
+      admin.firestore().collection('TEST').add({ name: "test", created_at: new Date() });
+    }, 10000);
     const subject = event.queryStringParameters.name || 'World'
     return {
       statusCode: 200,
