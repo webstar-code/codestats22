@@ -112,19 +112,19 @@ const BarChart: React.FC<IProps> = ({ state, month, week, year }) => {
             </g>
           ))}
 
-            <g>
-          {week && xScale.domain().map((tickValue) => (
-            <g
-            transform={`translate(${xScale(tickValue) + xScale.bandwidth() / 2}, ${innerHeight})`}
-            >
-              <text
-                dy={20}
-                style={{ textAnchor: 'middle', fontSize: 14 }}
+          <g>
+            {week && xScale.domain().map((tickValue) => (
+              <g
+                transform={`translate(${xScale(tickValue) + xScale.bandwidth() / 2}, ${innerHeight})`}
+              >
+                <text
+                  dy={20}
+                  style={{ textAnchor: 'middle', fontSize: 14 }}
                 >
-                {tickValue}
-              </text>
-            </g>
-          ))}
+                  {tickValue}
+                </text>
+              </g>
+            ))}
           </g>
           {state?.days?.map((day, i) => (
             <rect
@@ -133,7 +133,6 @@ const BarChart: React.FC<IProps> = ({ state, month, week, year }) => {
               y={yScale(Number(day.grand_total.decimal))}
               width={xScale.bandwidth()}
               fill={`${colorScale(Number(day.grand_total.decimal))}`}
-
             />
           ))}
         </g>

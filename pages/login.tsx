@@ -14,11 +14,15 @@ const Login: NextPage = () => {
     }
   }, [router.query])
 
-  return (
-    <div>
+  const login = () => { }
 
+  return (
+    <div className="w-full min-h-screen overflow-hidden flex flex-col items-center justify-center">
+      <h1 className="text-6xl font-medium text-primary mb-20">CodeStats</h1>
       <Link href="/api/login">
-        login
+        <button
+          className="py-2 px-4 bg-[#7AD930] text-base font-medium text-primary cursor-pointer rounded-lg">
+          Login with Wakatime</button>
       </Link>
 
     </div>

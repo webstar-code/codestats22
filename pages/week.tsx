@@ -5,15 +5,17 @@ import Sidebar from '../components/Sidebar';
 import { contextDay, ReactContext } from '../context/context'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { formatDate, format_date_toMonth, getWeek } from '../utils/methods';
-
+import BarChart2 from '../components/BarChart2';
 
 
 const Week = () => {
+
   let defaultYear = new Date().getFullYear();
   let firstday_ofweek;
   let lastday_ofweek;
 
   const state = useContext(ReactContext)
+
   const [currWeek, setCurrWeek] = useState(getWeek(new Date()));
   const [newData, setNewData] = useState<contextDay[] | undefined>();
 
@@ -85,6 +87,11 @@ const Week = () => {
               </div>
             </div>
           </div>
+          <div className='w-full m-4'>
+            <BarChart2 />
+
+          </div>
+          {/* <BarChart state={{ days: state?.days }} /> */}
         </div>
 
 

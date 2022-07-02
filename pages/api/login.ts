@@ -12,7 +12,6 @@ export default function handler( req: NextApiRequest, res: NextApiResponse<Data>
     const clientSecret = process.env.clientSecret;
     let redirect_uri = process.env.redirect_uri;
 
-    console.log(process.env.clientId);
     let queryparams = `client_id=${clientId}&response_type=code&redirect_uri=${redirect_uri}&scope=email,read_stats,read_logged_time`;
     res.redirect('https://wakatime.com/oauth/authorize?' + (queryparams));
 }

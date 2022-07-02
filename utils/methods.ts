@@ -65,3 +65,25 @@ export function getWeek(date: Date): number {
   var dayOfYear = ((today - onejan + 86400000) / 86400000);
   return Math.ceil(dayOfYear / 7)
 }
+
+
+export function formatData(data: any) {
+  const days = data.days.map(((item: any) => (
+    { date: item.date, grand_total: item.grand_total }
+  )));
+
+  return {
+    user: data.user,
+    range: data.range,
+    days: days
+  }
+}
+
+
+export function seedDatabase(firebase: any, seed: any) {
+  const data = formatData(seed);
+  localStorage.setItem('userid', data.user.id);
+  firebase.firestore().collection(data.user.id).doc('user').set(data.user);
+  firebase.firestore().collection(data.user.id).doc('range').set(data.range);
+  firebase.firestore().collection(data.user.id).doc('days').set({ days: data.days });
+}
