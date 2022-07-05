@@ -1,18 +1,23 @@
-import { useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import * as d3 from 'd3';
 import { axisBottom, scaleBand, scaleLinear } from "d3";
 
-const BarChart2 = () => {
+
+interface BarChartProps {
+  data: number[],
+  xData: string[],
+}
+
+const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
   const canvasRef = useRef(null);
-  const data = [10, 20, 30, 25, 12, 59, 90];
-  const xdata = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  const xdata = xData;
   const width = 900;
   const height = 500;
   const margin = {
-    top: 20,
-    right: 20,
-    left: 20,
-    bottom: 20,
+    top: 40,
+    right: 40,
+    left: 40,
+    bottom: 40,
   }
 
   const innerWidth = width - margin.left - margin.right;
@@ -27,21 +32,20 @@ const BarChart2 = () => {
         .tickFormat(i => i)
         .tickSizeOuter(0)
     );
-  console.log(xAxis);
   return (
     <div ref={canvasRef} className="">
       <svg width={width} height={height} className="bg-[#00001E]">
         <g
           transform={`translate(${margin.top}, ${margin.bottom})`}>
           <line
-            stroke="#ffffff"
+            stroke="#FFFFFF33"
             x1={0}
             y1={innerHeight}
             x2={0}
             y2={0}
           />
           <line
-            stroke="#ffffff"
+            stroke="#FFFFFF33"
             x1={0}
             y1={innerHeight}
             x2={width}
@@ -50,11 +54,13 @@ const BarChart2 = () => {
           {yScale.ticks().map((item) => (
             <g transform={`translate(0,${yScale(item)})`} key={(item)}>
               <text
-                x={-20}
+                style={{ stroke: "white", fontWeight: 200 }}
+                className="text-white"
+                x={-30}
                 y={5}
               >{item}</text>
               <line
-                stroke="#ffffff"
+                stroke="#FFFFFF33"
                 x1={0}
                 y1={0}
                 x2={innerWidth}
@@ -63,29 +69,41 @@ const BarChart2 = () => {
             </g>
           ))}
           {xScale.domain().map((item) => (
-            <g transform={`translate(${xScale(item)! + (xScale.bandwidth() / 2)},${innerHeight})`}>
-              <text style={{ textAnchor: 'middle' }} dy="0.71em">{item}</text>
+            <g transform={`translate(${xScale(item)! + (xScale.bandwidth() / 2)},${innerHeight + 20})`}>
+              <text className="font-normal" style={{ textAnchor: 'middle', stroke: "white", fontWeight: 200 }}>{item}</text>
             </g>
           ))}
 
-          {xdata.map((item, index) => <line x1={xScale(item)} x2={xScale(item)} y1={0} y2={innerHeight} stroke="#ffffff" />)}
-          {/* <defs>
-            <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
-              <stop offset="100%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+          {xdata.map((item, index) => <line x1={xScale(item)} x2={xScale(item)} y1={0} y2={innerHeight} stroke="#FFFFFF33" />)}
+     
+          <defs>
+            <linearGradient id="Gradient1">
+              <stop className="stop1" offset="0%" />
+              <stop className="stop2" offset="50%" />
+              <stop className="stop3" offset="100%" />
             </linearGradient>
-          </defs> */}
+            <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="rgba(0, 150, 199, 0.58" stop-opacity="110%" />
+              <stop offset="50%" stop-color="rgba(166, 193, 209, 0.2131)" stop-opacity="81.44%" />
+              <stop offset="100%" stop-color="rgba(196, 196, 196, 0)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
           {xdata.map((item, index) =>
-            <rect fill="#fff" className="bg-white text-white"
+            <rect
               x={xScale(item)! + 25}
               y={yScale(data[index])}
               width={xScale.bandwidth() - 50}
-              height={innerHeight - yScale(data[index])} />)
+              height={innerHeight - yScale(data[index])}
+              stroke="#0096C7"
+              strokeLinejoin="round"
+              fill="url(#Gradient2)"
+            />)
           }
         </g>
       </svg>
-    </div>
+    </div >
   )
 }
+
 
 export default BarChart2;

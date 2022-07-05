@@ -39,7 +39,7 @@ function Header() {
 
 
   return (
-    <div className=' w-full flex items-center justify-between bg-primary text-white px-8  py-2'>
+    <div className=' w-full flex items-center justify-between bg-[#00001E] text-white px-8  py-2'>
       <h1 className="text-2xl leading-loose">CodeStats</h1>
       <button onClick={() => get_data_dumps()}>Import Data</button>
       <button className='p-2 border border-black rounded-sm'>Log Out</button>

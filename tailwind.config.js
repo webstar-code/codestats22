@@ -23,10 +23,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        'primary': '#00264C'
-      }
-
+    
     },
   },
   plugins: [],
