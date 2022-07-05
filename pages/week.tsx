@@ -125,20 +125,7 @@ const Week = () => {
         </div>
 
 
-        {/* <div className='flex flex-col'>
-          <div className="w-full mb-10 flex-grow flex items-center justify-center">
-            <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
-              <MdChevronLeft className="w-full h-full" onClick={() => setCurrWeek(currWeek === 7 ? currWeek - 14 : currWeek - 7)} />
-            </div>
-            <p className="text-lg px-10">{format_date_toMonth(date)}</p>
-            <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
-              <MdChevronRight className="w-full h-full" onClick={() => setCurrWeek(currWeek === -7 ? currWeek + 14 : currWeek + 7)} />
-            </div>
-          </div>
-          {state && newData &&
-            <BarChart state={{ days: newData }} week={true} />
-          }
-        </div> */}
+
       </div>
     </div>
 

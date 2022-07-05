@@ -9,6 +9,7 @@ interface BarChartProps {
 }
 
 const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
+  console.log(data);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [canvas, setCanvas] = useState({
     width: 0,
@@ -110,9 +111,9 @@ const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
           </defs>
           {xdata.map((item, index) =>
             <rect
-              x={xScale(item)! + 25}
+              x={xScale(item)}
               y={yScale(data[index])}
-              width={xScale.bandwidth() - 50}
+              width={xScale.bandwidth()}
               height={innerHeight - yScale(data[index])}
               stroke="#0096C7"
               strokeLinejoin="round"
