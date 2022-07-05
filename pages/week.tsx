@@ -11,8 +11,6 @@ import BarChart2 from '../components/BarChart2';
 const Week = () => {
 
   let defaultYear = new Date().getFullYear();
-  let firstday_ofweek;
-  let lastday_ofweek;
 
   const state = useContext(ReactContext)
 
@@ -21,6 +19,7 @@ const Week = () => {
 
   const [year, setyear] = useState(defaultYear);
   const [weekDays, setweekDays] = useState<string[]>([]);
+
 
   function calculate_date_from_weekno(weekno: number) {
     const firstDay = new Date(year, 0, 1);
@@ -36,24 +35,36 @@ const Week = () => {
       let tommorow = new Date(week_start_date.getTime() + (24 * 60 * 60 * 1000 * i));
       weekdays.push(formatDate(tommorow));
     }
-    firstday_ofweek = format_date_toMonth(weekdays[0]);
-    lastday_ofweek = format_date_toMonth(weekdays[6]);
+
     return weekdays;
   }
 
   useEffect(() => {
-    let temp_weekDays = GetWeekDays(currWeek + 1);
-    setweekDays(GetWeekDays(currWeek + 1))
-    let temp_data: contextDay[] = [];
-    state?.days?.forEach((item) => {
-      if (temp_weekDays.includes(item.date)) {
-        temp_data.push(item);
-      }
-    });
-    setNewData(temp_data);
-
+    let temp_weekDays = GetWeekDays(currWeek);
+    console.log(temp_weekDays);
+    setweekDays(GetWeekDays(currWeek))
 
   }, [currWeek]);
+
+  useEffect(() => {
+    let temp_data: contextDay[] = [];
+ 
+    if (state?.days?.length) {
+      for (let i = 0; i < state?.days?.length; i++) {
+        let item = state.days[i];
+        if (weekDays.includes(item.date)) {
+          temp_data.push(item);
+        }
+      }
+    }
+    setNewData(temp_data);
+
+    // state?.days?.forEach((item) => {
+    //   if (weekDays.includes(item.date)) {
+    //     temp_data.push(item);
+    //   }
+    // });
+  }, [weekDays]);
 
   const setToPrevWeek = () => {
     if (currWeek - 1 <= 0) {
@@ -63,6 +74,8 @@ const Week = () => {
       setCurrWeek(currWeek - 1);
     }
   }
+
+  console.log(newData);
 
 
   const setToNextWeek = () => {
@@ -89,18 +102,18 @@ const Week = () => {
             <h1 className='text-base font-medium whitespace-nowrap'>Week {currWeek} / {year}</h1>
 
             <div className="w-full flex-grow flex items-center justify-center">
-              <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
-                <MdChevronLeft className="w-full h-full" onClick={() => setToPrevWeek()} />
+              <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2" onClick={() => setToPrevWeek()}>
+                <MdChevronLeft className="w-full h-full" />
               </div>
-              <p className="text-lg px-10">{format_date_toMonth(weekDays[0])}</p>
+              <p className="text-lg px-5">{format_date_toMonth(weekDays[0])}</p>
               -
-              <p className="text-lg px-10">{format_date_toMonth(weekDays[weekDays.length - 1])}</p>
-              <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2">
-                <MdChevronRight className="w-full h-full" onClick={() => setToNextWeek()} />
+              <p className="text-lg px-5">{format_date_toMonth(weekDays[weekDays.length - 1])}</p>
+              <div className="w-8 h-8 cursor-pointer hover:bg-gray-300 rounded-full p-2" onClick={() => setToNextWeek()}>
+                <MdChevronRight className="w-full h-full" />
               </div>
             </div>
           </div>
-          <div className='w-full my-5'>
+          <div className='w-full h-full my-5'>
             <BarChart2
               data={newData.map((item) => Number(item.grand_total.decimal))}
               xData={weeks}

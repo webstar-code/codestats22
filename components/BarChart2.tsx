@@ -1,4 +1,4 @@
-import { CSSProperties, useRef } from "react";
+import { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import * as d3 from 'd3';
 import { axisBottom, scaleBand, scaleLinear } from "d3";
 
@@ -9,7 +9,11 @@ interface BarChartProps {
 }
 
 const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [canvas, setCanvas] = useState({
+    width: 0,
+    height: 0
+  })
   const xdata = xData;
   const width = 900;
   const height = 500;
@@ -20,8 +24,21 @@ const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
     bottom: 40,
   }
 
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  useEffect(() => {
+    if (canvasRef.current) {
+      setCanvas({
+        width: 900,
+        height: 500
+      })
+      // setCanvas({
+      //   width: canvasRef.current.getBoundingClientRect().width,
+      //   height: canvasRef.current.getBoundingClientRect().height
+      // })
+    }
+  }, []);
+
+  const innerWidth = canvas.width - margin.left - margin.right;
+  const innerHeight = canvas.height - margin.top - margin.bottom;
 
   const xScale = scaleBand().domain(xdata).range([0, innerWidth]);
   const yScale = scaleLinear().domain([0, Math.max(...data.map(item => item))]).range([innerHeight, 0]);
@@ -33,8 +50,11 @@ const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
         .tickSizeOuter(0)
     );
   return (
-    <div ref={canvasRef} className="">
-      <svg width={width} height={height} className="bg-[#00001E]">
+    <div ref={canvasRef} className="w-full h-full">
+      <svg width={canvas.width} height={canvas.height} className="bg-[#00001E]">
+        {data.length === 0 &&
+          <text transform={`translate(${innerWidth / 2}, ${innerHeight / 2})`} stroke="white">No data found</text>
+        }
         <g
           transform={`translate(${margin.top}, ${margin.bottom})`}>
           <line
@@ -75,7 +95,7 @@ const BarChart2: React.FC<BarChartProps> = ({ data, xData }) => {
           ))}
 
           {xdata.map((item, index) => <line x1={xScale(item)} x2={xScale(item)} y1={0} y2={innerHeight} stroke="#FFFFFF33" />)}
-     
+
           <defs>
             <linearGradient id="Gradient1">
               <stop className="stop1" offset="0%" />
