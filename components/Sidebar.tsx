@@ -18,7 +18,7 @@ const Sidebar = () => {
         <Link href={`/day`}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">Today</p></Link>
         <Link href={"/week"}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This week</p></Link>
         <Link href={"/month"}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This month</p></Link>
-        <p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This year</p>
+        <Link href={"/year"}><p className="w-full py-5 hover:bg-indigo-200 text-lg font-medium text-center cursor-pointer">This year</p></Link>
 
       </div>
     </div>
